@@ -6,6 +6,8 @@ RUN apt-get update && \
 
 WORKDIR /tests
 COPY load_test.sh .
+COPY urls.txt .
+COPY siegerc /root/.siegerc
 RUN dos2unix load_test.sh && chmod +x load_test.sh
 
 ENTRYPOINT ["./load_test.sh"]
