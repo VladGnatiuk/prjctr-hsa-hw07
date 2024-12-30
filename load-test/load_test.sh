@@ -1,4 +1,7 @@
 #!/bin/bash
 set -e
 
-siege -c1 -t10S -f /tests/urls.txt
+for c in 10 25 50 100
+do
+    siege -c$c -t10S -v -H "Content-Type: application/json" -f /tests/urls.txt
+done

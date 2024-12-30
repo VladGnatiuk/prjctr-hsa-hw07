@@ -1,4 +1,0 @@
-logfile = ${HOME}/siege.log
-verbose = false
-quiet = false
-show-logfile = false 
