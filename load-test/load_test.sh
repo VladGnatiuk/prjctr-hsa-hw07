@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-HOST="host.docker.internal:8000"
+HOST="localhost:8000"
 REQUESTS=1000
 CONCURRENCY=10
 RESULTS_DIR="/results"
@@ -9,6 +9,9 @@ RESULTS_DIR="/results"
 # Colors for output
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
+
+# Create results directory if it doesn't exist
+mkdir -p $RESULTS_DIR
 
 echo "Starting load tests..."
 

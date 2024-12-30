@@ -1,5 +1,5 @@
 version: '3.6'
-name: prctr-hsa-hw02
+name: prctr-hsa-hw04
 services:
   telegraf:
     image: telegraf:1.29-alpine
@@ -88,6 +88,13 @@ services:
     environment:
       - MONGODB_URL=mongodb://root:example@mongodb:27017/
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
 volumes:
   grafana_data: {}

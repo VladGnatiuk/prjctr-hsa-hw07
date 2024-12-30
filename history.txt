@@ -27,7 +27,25 @@ Docker
 
 ab -V
 
-chmod +x load_test.sh
+chmod +x load-test/load_test.sh
 
 docker build -t load-test load-test/
 docker run -v ${PWD}/load-test/results:/results load-test
+
+---
+Connections > Data Sources
+    Add data source > Prometheus
+    URL: http://prometheus:9090
+
+import one of these popular dashboards:
+    FastAPI Dashboard (ID: 14282): Shows request rates, response times, and error rates
+    Node Exporter Full (ID: 1860): Shows system metrics
+    Starlette/FastAPI Metrics (ID: 13195): Focused on FastAPI-specific metrics
+    
+    Dashboards/new/import
+        Select Prometheus data source
+
+---
+
+docker build -t load-test ./load-test
+docker run --network="host" -v "$(pwd)/results:/results" load-test

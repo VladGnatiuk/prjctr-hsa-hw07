@@ -1,12 +1,27 @@
 import os
 from typing import Optional
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from elasticsearch import AsyncElasticsearch
 from pydantic import BaseModel
 import uvicorn
+from starlette_prometheus import metrics, PrometheusMiddleware
+import time
 
 app = FastAPI()
+
+# Add Prometheus middleware
+app.add_middleware(PrometheusMiddleware)
+app.add_route("/metrics", metrics)
+
+# Custom middleware to track response times
+@app.middleware("http")
+async def add_response_time(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    return response
 
 # Get configuration from environment variables
 MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://root:example@localhost:27017/")
@@ -57,7 +72,7 @@ async def shutdown_db_client():
 # MongoDB endpoints
 @app.post("/items/mongo")
 async def create_item_mongo(item: Item):
-    result = await mongo_collection.insert_one(item.dict())
+    result = await mongo_collection.insert_one(item.model_dump())
     return {"id": str(result.inserted_id)}
 
 @app.get("/items/mongo")
@@ -72,7 +87,7 @@ async def read_items_mongo():
 # Elasticsearch endpoints
 @app.post("/items/elastic")
 async def create_item_elastic(item: Item):
-    result = await es_client.index(index="items", document=item.dict())
+    result = await es_client.index(index="items", document=item.model_dump())
     return {"result": result["result"], "id": result["_id"]}
 
 @app.post("/items/elastic/search")
