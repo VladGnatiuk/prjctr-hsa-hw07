@@ -1,7 +1,7 @@
 FROM httpd:2.4
 
 RUN apt-get update && \
-    apt-get install -y apache2-utils dos2unix && \
+    apt-get install -y siege dos2unix && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tests

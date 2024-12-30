@@ -5,14 +5,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from elasticsearch import AsyncElasticsearch
 from pydantic import BaseModel
 import uvicorn
-from starlette_prometheus import metrics, PrometheusMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 import time
 
 app = FastAPI()
 
-# Add Prometheus middleware
-app.add_middleware(PrometheusMiddleware)
-app.add_route("/metrics", metrics)
+# Replace the existing Prometheus middleware with this:
+Instrumentator().instrument(app).expose(app)
 
 # Custom middleware to track response times
 @app.middleware("http")

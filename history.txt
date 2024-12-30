@@ -46,6 +46,18 @@ import one of these popular dashboards:
         Select Prometheus data source
 
 ---
+docker-compose down
+docker-compose up --build
+
 
 docker build -t load-test ./load-test
 docker run --network="host" -v "$(pwd)/results:/results" load-test
+
+http://localhost:8000/metrics
+http://localhost:9090/targets
+http://localhost:9090/query?g0.expr=http_requests_total
+
+docker-compose restart grafana
+
+
+rate(http_request_duration_seconds_sum{handler="/health/mongo"}[5m]) / rate(http_request_duration_seconds_count{handler="/health/mongo"}[5m])

@@ -4,3 +4,4 @@ motor
 elasticsearch[async]
 pydantic
 starlette-prometheus
+prometheus-fastapi-instrumentator
