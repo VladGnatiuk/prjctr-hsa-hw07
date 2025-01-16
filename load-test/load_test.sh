@@ -14,9 +14,6 @@ curl -I "$IMAGE_URL"
 echo -e "\nThird request (should be HIT):"
 curl -I "$IMAGE_URL"
 
-echo -e "\nThird request (should be HIT):"
-curl -I "$IMAGE_URL"
-
 # Test cache purge
 echo -e "\nPurging cache:"
 curl -X PURGE "${PURGE_URL//[[:space:]]/}"

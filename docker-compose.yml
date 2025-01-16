@@ -1,16 +1,31 @@
 version: '3'
 services:
-  nginx:
+  nginx-images:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/images:/usr/share/nginx/html/images:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    networks:
+      - app-network
+
+  nginx-cache:
     image: openresty/openresty:alpine
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/images:/usr/share/nginx/images:ro
+      - ./openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./openresty/conf.d:/etc/nginx/conf.d:ro
       - nginx_cache:/var/cache/nginx
       - nginx_logs:/usr/local/openresty/nginx/logs
+    networks:
+      - app-network
+    depends_on:
+      - nginx-images
 
 volumes:
   nginx_cache:
   nginx_logs:
+
+networks:
+  app-network:
