@@ -3,55 +3,11 @@ docker-compose up -d
 
 docker-compose up --build
 
-import dashboard
-    https://grafana.com/grafana/dashboards/61-telegraf-metrics/
-
-docker compose restart telegraf
-
-
-docker-compose up -d --build fastapi
-
 ---
-New-Item -ItemType Directory -Path "nginx\conf.d", "nginx\ssl", "nginx\www" -Force
-
----
-WSL
-    sudo apt-get update
-    sudo apt-get install apache2-utils
-
-Windows
-    choco install apache-httpd
-
-Docker
-    docker run httpd ab -V
-
-ab -V
-
-chmod +x load-test/load_test.sh
-
-docker build -t load-test load-test/
-docker run -v ${PWD}/load-test/results:/results load-test
-
----
-Connections > Data Sources
-    Add data source > Prometheus
-    URL: http://prometheus:9090
-
-import one of these popular dashboards:
-    FastAPI Dashboard (ID: 14282): Shows request rates, response times, and error rates
-    Node Exporter Full (ID: 1860): Shows system metrics
-    Starlette/FastAPI Metrics (ID: 13195): Focused on FastAPI-specific metrics
-    
-    Dashboards/new/import
-        Select Prometheus data source
-
----
-docker-compose down
-docker-compose up --build
 
 
 docker build -t load-test ./load-test
-docker run --network="host" -v "$(pwd)/results:/results" load-test
+docker run --network="host" -v "$(pwd)/load-test:/scripts" load-test
 
 http://localhost:8000/metrics
 http://localhost:9090/targets

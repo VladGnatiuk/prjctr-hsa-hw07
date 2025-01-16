@@ -1,12 +1,8 @@
-FROM httpd:2.4
+FROM alpine:latest
 
-RUN apt-get update && \
-    apt-get install -y siege dos2unix && \
-    rm -rf /var/lib/apt/lists/*
+# Install curl
+RUN apk add --no-cache curl
 
-WORKDIR /tests
-COPY load_test.sh .
-COPY urls.txt .
-RUN dos2unix load_test.sh && chmod +x load_test.sh
+WORKDIR /scripts
 
-ENTRYPOINT ["./load_test.sh"]
+ENTRYPOINT ["sh", "/scripts/load_test.sh"]
