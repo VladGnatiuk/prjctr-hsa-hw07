@@ -16,8 +16,8 @@ services:
     volumes:
       - ./openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - ./openresty/conf.d:/etc/nginx/conf.d:ro
-      - nginx_cache:/var/cache/nginx
-      - nginx_logs:/usr/local/openresty/nginx/logs
+      - ./openresty/nginx_cache:/var/cache/nginx
+      - ./openresty/nginx_logs:/usr/local/openresty/nginx/logs
     networks:
       - app-network
     depends_on:
