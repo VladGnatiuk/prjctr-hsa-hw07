@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: web
+    volumes:
+      - ./web/images:/usr/share/nginx/html/images:ro
+      - ./web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      - mynet
+
+  web-proxy:
+    image: openresty/openresty:alpine
+    container_name: web-proxy
+    volumes:
+      - ./web-proxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    driver: bridge
