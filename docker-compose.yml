@@ -6,10 +6,23 @@ services:
       - ./web/images:/usr/share/nginx/html/images:ro
       - ./web/conf.d:/etc/nginx/conf.d:ro
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     networks:
       - network1
+
+  web-proxy:
+    image: openresty/openresty:alpine
+    container_name: web-proxy
+    volumes:
+      - ./web-proxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./web-proxy/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+    networks:
+      - network1
+    depends_on:
+      - web
 
   test:
     build: 

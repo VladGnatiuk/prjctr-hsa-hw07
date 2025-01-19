@@ -1,5 +1,11 @@
 docker-compose up --build
+docker-compose down
 docker-compose down && docker-compose up --build
+
+docker-compose exec -it test sh
+    sh test_web.sh
+
+docker-compose exec test sh /scripts/test_web.sh
 
 ---
 
