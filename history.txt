@@ -1,32 +1,18 @@
 docker-compose up --build
-docker-compose down
-docker-compose down && docker-compose up --build
-
----
-docker compose exec web-proxy nginx -s reload
----
-docker-compose exec test sh /scripts/test_web.sh
-
 docker-compose exec test sh /scripts/test_web-proxy.sh
 docker-compose exec test sh /scripts/purge_image1.sh
+
+docker-compose exec test sh /scripts/test_web.sh
+---
+
+docker-compose down
+
+find . -type f \( -name "*.sh" -o -name "*.conf" -o -name "*.yml" \) -exec dos2unix {} \;
+
+docker compose exec web-proxy nginx -s reload
 
 docker compose exec web-proxy apt-get update && docker compose exec web-proxy apt-get install -y tree
 docker compose exec web-proxy tree /tmp/nginx_cache
 docker compose exec web-proxy bash -c "rm -rf /tmp/nginx_cache && nginx -s reload"
-
----
-find . -type f \( -name "*.sh" -o -name "*.conf" -o -name "*.yml" \) -exec dos2unix {} \;
 ---
 
-
-docker build -t load-test ./load-test
-docker run --network="host" -v "$(pwd)/load-test:/scripts" load-test
-
-http://localhost:8000/metrics
-http://localhost:9090/targets
-http://localhost:9090/query?g0.expr=http_requests_total
-
-docker-compose restart grafana
-
-
-rate(http_request_duration_seconds_sum{handler="/health/mongo"}[5m]) / rate(http_request_duration_seconds_count{handler="/health/mongo"}[5m])
